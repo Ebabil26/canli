@@ -1,0 +1,79 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "Words API",
+        "description": "API документация для WordsController",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000"
+        }
+    ],
+    "paths": {
+        "/index": {
+            "get": {
+                "tags": [
+                    "Index"
+                ],
+                "summary": "Get index data",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "tags": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Tag"
+                                    }
+                                },
+                                "languages": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Language"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Tag": {
+            "required": [
+                "id",
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": "1"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Tag 1"
+                }
+            }
+        },
+        "Language": {
+            "required": [
+                "id",
+                "value"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": "1"
+                },
+                "value": {
+                    "type": "string",
+                    "example": "English"
+                }
+            }
+        }
+    }
+}
