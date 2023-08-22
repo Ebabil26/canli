@@ -298,7 +298,7 @@ class WordsController extends Controller
         $word = $request->input('q');
     
         // Загрузка базы данных слов из JSON файла
-        $database = json_decode(Storage::disk('local')->get('/words.json'), true);
+        $database = json_decode(file_get_contents(storage_path('app/words.json')), true);
     
         // Поиск перевода в базе данных
         $translation = $this->findTranslation($database, $sourceLanguage, $targetLanguage, $word);
