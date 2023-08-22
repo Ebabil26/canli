@@ -291,27 +291,32 @@ class WordsController extends Controller
     }
 
 
-    public function translate(Request $request) //SS: метод который будет возвращать перевод
+    public function translate(Request $request)
     {
-
         $sourceLanguage = $request->input('source');
         $targetLanguage = $request->input('target');
         $word = $request->input('q');
-
+    
         // Загрузка базы данных слов из JSON файла
         $database = json_decode(Storage::disk('local')->get('/words.json'), true);
-
+    
         // Поиск перевода в базе данных
         $translation = $this->findTranslation($database, $sourceLanguage, $targetLanguage, $word);
-
-        return view('translate', [
+    
+        $response = [
             'source' => $sourceLanguage,
             'target' => $targetLanguage,
             'word' => $word,
             'translation' => $translation,
-        ]);
+        ];
+    
+        return response()->json($response);
     }
 
+
+
+    
+    
     private function findTranslation($database, $sourceLanguage, $targetLanguage, $word)
     {
         foreach ($database as $entry) {

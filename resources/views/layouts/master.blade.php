@@ -88,7 +88,7 @@
 
 <!-- App scripts -->
 
-<script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=k937sxny0kzgnmzi0rn8htloa5vhfygpkt0sp9mcv5btkmvh"></script>
+<script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=l6r3pa5enda82alkszyc78hpqnlrt75be3t0z5ojz2tcltmt"></script>
 <script src="/vendor/select2-4.0.3/dist/js/select2.full.min.js"></script>
 
 <script>
