@@ -318,10 +318,19 @@ return response($jsonResponse)
 }
 
 
-private function findTranslationFromDatabase($sourceLanguage, $targetLanguage, $word)
+private function findTranslationFromDatabase($sourceCode, $targetCode, $word)
 {
-    $translation = \DB::table('words') // Используем фасад DB здесь
-        ->where('language_id', $sourceLanguage)
+    $sourceLanguageId = \DB::table('languages')
+        ->where('code', $sourceCode)
+        ->value('id');
+
+    $targetLanguageId = \DB::table('languages')
+        ->where('code', $targetCode)
+        ->value('id');
+
+    $translation = \DB::table('words')
+        ->where('language_id', $sourceLanguageId)
+        ->where('targetLanguage_id', $targetLanguageId)
         ->where('word', $word)
         ->value('translation');
 
