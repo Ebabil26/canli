@@ -104,3 +104,13 @@ DEVSENSE/packages-cache/zendframework/zend-validator.2.13.0.json.gz
 DEVSENSE/packages-cache/zendframework/zendservice-apple-apns.1.4.1.json.gz
 DEVSENSE/packages-cache/zendframework/zendservice-google-gcm.2.1.1.json.gz
 DEVSENSE/packages-cache/zircote/swagger-php.2.0.16.json.gz
+DEVSENSE/packages-cache/doctrine/deprecations.v1.1.1.json.gz
+DEVSENSE/packages-cache/league/mime-type-detection.1.13.0.json.gz
+DEVSENSE/packages-cache/phpdocumentor/type-resolver.1.7.3.json.gz
+DEVSENSE/packages-cache/phpstan/phpdoc-parser.1.23.1.json.gz
+DEVSENSE/packages-cache/symfony/polyfill-ctype.v1.28.0.json.gz
+DEVSENSE/packages-cache/symfony/polyfill-intl-idn.v1.28.0.json.gz
+DEVSENSE/packages-cache/symfony/polyfill-intl-normalizer.v1.28.0.json.gz
+DEVSENSE/packages-cache/symfony/polyfill-mbstring.v1.28.0.json.gz
+DEVSENSE/packages-cache/symfony/polyfill-php72.v1.28.0.json.gz
+DEVSENSE/packages-cache/symfony/polyfill-php80.v1.28.0.json.gz

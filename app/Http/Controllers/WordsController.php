@@ -291,44 +291,42 @@ class WordsController extends Controller
     }
 
 
-    public function translate(Request $request)
-    {
-        $sourceLanguage = $request->input('source');
-        $targetLanguage = $request->input('target');
-        $word = $request->input('q');
-    
-        // Загрузка базы данных слов из JSON файла
-        $database = json_decode(file_get_contents(storage_path('app/words.json')), true);
-    
-        // Поиск перевода в базе данных
-        $translation = $this->findTranslation($database, $sourceLanguage, $targetLanguage, $word);
-    
-        $response = [
-            'source' => $sourceLanguage,
-            'target' => $targetLanguage,
-            'word' => $word,
-            'translation' => $translation,
-        ];
-    
-        return response()->json($response);
-    }
+public function translate(Request $request)
+{
+    $sourceLanguage = $request->input('source');
+    $targetLanguage = $request->input('target');
+    $word = $request->input('q');
+
+    $translation = $this->findTranslationFromDatabase($sourceLanguage, $targetLanguage, $word);
+
+    $response = [
+        'source' => $sourceLanguage,
+        'target' => $targetLanguage,
+        'word' => $word,
+        'translation' => $translation,
+    ];
+
+   // Преобразование массива в строку без кавычек
+   $jsonResponse = '{' . implode(',', array_map(function ($key, $value) {
+    return $key . ':' . $value;
+}, array_keys($response), array_values($response))) . '}';
+
+// Возврат отформатированного JSON-ответа
+return response($jsonResponse)
+    ->header('Content-Type', 'application/json')
+    ->header('charset', 'utf-8');
+}
 
 
+private function findTranslationFromDatabase($sourceLanguage, $targetLanguage, $word)
+{
+    $translation = \DB::table('words') // Используем фасад DB здесь
+        ->where('language_id', $sourceLanguage)
+        ->where('word', $word)
+        ->value('translation');
 
-    
-    
-    private function findTranslation($database, $sourceLanguage, $targetLanguage, $word)
-    {
-        foreach ($database as $entry) {
-            if ($entry['language'] == $sourceLanguage) {
-                if (isset($entry['word']) && $entry['word'] == $word) {
-                    return $entry['translation'];
-                }
-            }
-        }
-
-        return 'Translation not found';
-    }
+    return $translation;
+}
 
     public function getWordHistory() //SS: метод возвращает историю запросов пользователя
     {
