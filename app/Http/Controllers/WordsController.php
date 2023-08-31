@@ -290,32 +290,65 @@ class WordsController extends Controller
         return response()->json($words);
     }
 
-
     public function translate(Request $request)
     {
         $sourceLanguage = $request->input('source');
         $targetLanguage = $request->input('target');
         $word = $request->input('q');
     
-        // Загрузка базы данных слов из JSON файла
-        $database = json_decode(file_get_contents(storage_path('app/words.json')), true);
+        // Поиск перевода в базе данных с использованием Eloquent
+        $translation = Translation::where('source_language', $sourceLanguage)
+            ->where('target_language', $targetLanguage)
+            ->where('word', $word)
+            ->first();
     
-        // Поиск перевода в базе данных
-        $translation = $this->findTranslation($database, $sourceLanguage, $targetLanguage, $word);
+        // Проверка наличия перевода
+        if ($translation) {
+            $translationText = $translation->translation;
+        } else {
+            $translationText = 'Translation not found';
+        }
     
         $response = [
             'source' => $sourceLanguage,
             'target' => $targetLanguage,
             'word' => $word,
-            'translation' => $translation,
+            'translation' => $translationText,
         ];
     
-        return response()->json($response);
+        return response()->json($response); // Возврат JSON-ответа с использованием метода json()
     }
+    /*
+    public function translate(Request $request)
+{
+    $sourceLanguage = $request->input('source');
+    $targetLanguage = $request->input('target');
+    $word = $request->input('q');
 
+    // Загрузка базы данных слов из JSON файла
+    $database = json_decode(file_get_contents(storage_path('app/words.json')), true);
 
+    // Поиск перевода в базе данных
+    $translation = $this->findTranslation($database, $sourceLanguage, $targetLanguage, $word);
 
-    
+    $response = [
+        'source' => $sourceLanguage,
+        'target' => $targetLanguage,
+        'word' => $word,
+        'translation' => $translation,
+    ];
+
+    // Преобразование массива в строку без кавычек
+    $jsonResponse = '{' . implode(',', array_map(function ($key, $value) {
+        return $key . ':' . $value;
+    }, array_keys($response), array_values($response))) . '}';
+
+    // Возврат отформатированного JSON-ответа
+    return response($jsonResponse)
+        ->header('Content-Type', 'application/json')
+        ->header('charset', 'utf-8');
+}
+*/
     
     private function findTranslation($database, $sourceLanguage, $targetLanguage, $word)
     {
