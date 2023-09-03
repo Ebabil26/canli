@@ -154,18 +154,24 @@ class WordsController extends Controller
     public function show($word)
     {
         $allTags = Tag::all()->sortBy('value');
-
         $allLanguages = Language::all()->sortBy('value');
-
+        $targetLanguages = Language::all()->sortBy('value');
         $selectedTagIds = [];
-
-        foreach ($word->tags as $tag)
-        {
+    
+        foreach ($word->tags as $tag) {
             $selectedTagIds[] = $tag->id;
         }
-
-        return view('words.edit', ['word' => $word, 'tags' => $allTags, 'languages' => $allLanguages, 'selectedTagIds' => $selectedTagIds]);
+    
+    
+        return view('words.edit', [
+            'word' => $word,
+            'tags' => $allTags,
+            'languages' => $allLanguages,
+            'targetLanguages' => $targetLanguages,
+            'selectedTagIds' => $selectedTagIds,
+        ]);
     }
+    
 
     public function delete($word)
     {
@@ -202,6 +208,8 @@ class WordsController extends Controller
             $word->word_latin =  $request->input('word_latin');
             $word->word_latin_formatted =  $request->input('word_latin_formatted');
             $word->language_id = $request->input('language');
+            $word->targetLanguage_id = $request->input('targetLanguage');
+
 
 
             $word->save();
@@ -213,6 +221,7 @@ class WordsController extends Controller
                 'word_latin' => $request->input('word_latin') || '',
                 'word_latin_formatted' => $request->input('word_latin') || '',
                 'language_id' => $request->language_id,
+                'targetLanguage_id' => $request->targetLanguage_id,
             ]);
 
             $authorName = $request->get('authorName');
@@ -238,6 +247,7 @@ class WordsController extends Controller
         $word->word_latin_formatted = $request->input('word_latin_formatted');
         $word->word = $request->input('word');
         $word->language_id = $request->input('language');
+        $word->targetLanguage_id = $request->input('targetLanguage');
 
         $selectedTags = ($request->has('tags')) ? $request->input('tags') : [];
 

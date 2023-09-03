@@ -37,6 +37,20 @@
     </div>
 
     <div class="form-group">
+    <label for="targetLanguage" class="control-label">Целевой язык:</label>
+    <select class="form-control" id="targetLanguage" name="targetLanguage">
+        @foreach ($languages as $targetLanguage)
+            <option value="{{ $targetLanguage->id }}" {{ $word->targetLanguage_id === $targetLanguage->id ? 'selected' : '' }}>
+                {{ $targetLanguage->language }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
+
+
+
+    <div class="form-group">
         <label>Слово на латинице форматированное</label>
         <textarea name="word_latin_formatted"  style="height: 100px;">
             {{ $word->word_latin_formatted }}
