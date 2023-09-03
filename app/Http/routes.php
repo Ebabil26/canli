@@ -28,9 +28,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/languages/{language}/edit', 'LanguageController@edit')->name('languages.edit');
 
 
-    Route::match(['GET', 'POST'], '/translate', 'WordsController@translate')->name('translate');
-    Route::post('/translate', 'WordsController@translate')->name('translate');
-    Route::get('/word', 'WordsController@findTranslation')->name('word');
+
 
 
     // категории разговорника
@@ -110,6 +108,11 @@ Route::group(['prefix' => 'api'], function () {
 Route::post('token', 'TokenController@add');
 Route::post('word', 'WordsController@add');
 Route::get('last-added/{date?}', 'WordsController@lastAdded');
+
+Route::match(['GET', 'POST'], '/translate', 'WordsController@translate')->name('translate');
+Route::post('/translate', 'WordsController@translate')->name('translate');
+Route::get('/word', 'WordsController@findTranslation')->name('word');
+
 
 Route::get('announcementlist', 'AnnouncementsController@index');
 Route::get('announcement/{id}', 'AnnouncementsController@show');
