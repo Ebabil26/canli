@@ -313,8 +313,7 @@ public function translate(Request $request)
 
 // Возврат отформатированного JSON-ответа
 return response($jsonResponse)
-    ->header('Content-Type', 'application/json')
-    ->header('charset', 'utf-8');
+    ->header('Content-Type', 'text/html; charset=utf-8');
 }
 
 
