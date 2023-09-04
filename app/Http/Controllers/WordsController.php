@@ -307,12 +307,13 @@ public function translate(Request $request)
     $targetLanguage = $request->input('target');
     $word = $request->input('q');
 
-    $translation = $this->findTranslationFromDatabase($sourceLanguage, $targetLanguage, $word);
+   list($translation, $wordId) = $this->getTranslationAndWordId($sourceLanguage, $targetLanguage, $word);
 
     $response = [
         'source' => $sourceLanguage,
         'target' => $targetLanguage,
         'word' => $word,
+        'word_id' => $wordId,
         'translation' => $translation,
     ];
 
@@ -327,7 +328,7 @@ return response($jsonResponse)
 }
 
 
-private function findTranslationFromDatabase($sourceCode, $targetCode, $word)
+private function getTranslationAndWordId($sourceCode, $targetCode, $word)
 {
     $sourceLanguageId = \DB::table('languages')
         ->where('code', $sourceCode)
@@ -342,9 +343,42 @@ private function findTranslationFromDatabase($sourceCode, $targetCode, $word)
         ->where('targetLanguage_id', $targetLanguageId)
         ->where('word', $word)
         ->value('translation');
+        
+    $wordId = \DB::table('words')
+        ->where('language_id', $sourceLanguageId)
+        ->where('targetLanguage_id', $targetLanguageId)
+        ->where('word', $word)
+        ->value('id');
 
-    return $translation;
+    return [$translation, $wordId];
 }
+
+
+    public function suggest(Request $request) // SS: метод возвращает другие слова похожие на введенное слово
+    {
+        $inputWord = $request->input('word');
+
+        // Получить слова из базы данных, которые похожи на введенное слово
+        $similarWords = Word::where('word', 'LIKE', '%' . $inputWord . '%')->get();
+
+        // Создать массив для хранения рекомендаций
+        $suggestions = [];
+
+        // Перебрать похожие слова и создать рекомендации
+        foreach ($similarWords as $word) {
+            // Создать рекомендацию с правильным описанием
+            $suggestion = [
+                'word_id' =>$word->id,
+                'word' => $word->word,
+                'translation' => $word->translation,
+            ];
+
+            // Добавить рекомендацию в массив
+            $suggestions[] = $suggestion;
+        }
+        // Вернуть рекомендации в формате JSON
+        return response()->json($suggestions, 200, [], JSON_UNESCAPED_UNICODE);    }
+
 
     public function getWordHistory() //SS: метод возвращает историю запросов пользователя
     {
@@ -355,34 +389,6 @@ private function findTranslationFromDatabase($sourceCode, $targetCode, $word)
 
         return $history;
     }
-
-
-    public function suggest(Request $request) // SS: метод возвращает другие слова похожие на введенное слово
-    {
-        $inputWord = $request->input('word');
-
-        // Получить слова из базы данных, которые похожи на введенное слово
-        $similarWords = Word::where('name', 'LIKE', '%' . $inputWord . '%')->get();
-
-        // Создать массив для хранения рекомендаций
-        $suggestions = [];
-
-        // Перебрать похожие слова и создать рекомендации
-        foreach ($similarWords as $word) {
-            // Создать рекомендацию с правильным описанием
-            $suggestion = [
-                'word' => $word->name,
-                'description' => $word->description,
-            ];
-
-            // Добавить рекомендацию в массив
-            $suggestions[] = $suggestion;
-        }
-
-        // Вернуть рекомендации в формате JSON
-        return response()->json($suggestions);
-    }
-
 
     public function export()
     {

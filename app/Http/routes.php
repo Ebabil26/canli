@@ -110,8 +110,7 @@ Route::post('word', 'WordsController@add');
 Route::get('last-added/{date?}', 'WordsController@lastAdded');
 
 Route::match(['GET', 'POST'], '/translate', 'WordsController@translate')->name('translate');
-Route::post('/translate', 'WordsController@translate')->name('translate');
-Route::get('/word', 'WordsController@findTranslation')->name('word');
+Route::match(['GET', 'POST'], '/suggest', 'WordsController@suggest')->name('suggest');
 
 
 Route::get('announcementlist', 'AnnouncementsController@index');
