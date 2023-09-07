@@ -323,8 +323,7 @@ public function translate(Request $request)
 }, array_keys($response), array_values($response))) . '}';
 
 // Возврат отформатированного JSON-ответа
-return response($jsonResponse)
-    ->header('Content-Type', 'text/html; charset=utf-8');
+return response()->json($response   , 200, [], JSON_UNESCAPED_UNICODE);   
 }
 
 
@@ -377,18 +376,8 @@ private function getTranslationAndWordId($sourceCode, $targetCode, $word)
             $suggestions[] = $suggestion;
         }
         // Вернуть рекомендации в формате JSON
-        return response()->json($suggestions, 200, [], JSON_UNESCAPED_UNICODE);    }
-
-
-    public function getWordHistory() //SS: метод возвращает историю запросов пользователя
-    {
-        $history = DB::table('word_requests')
-            ->select('word')
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return $history;
-    }
+        return response()->json($suggestions, 200, [], JSON_UNESCAPED_UNICODE);   
+     }
 
     public function export()
     {
